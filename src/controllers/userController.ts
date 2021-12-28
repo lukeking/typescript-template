@@ -1,4 +1,4 @@
-import express from 'express';
+// import { Request as ExRequest } from 'express';
 import {
     Body,
     Controller,
@@ -10,9 +10,8 @@ import {
     Route,
     Security,
     SuccessResponse,
-    Response,
     Tags,
-    Request,
+    // Request,
 } from "tsoa";
 import { Email, ShortId } from '../constants';
 import UserModel, { User, UserCreationParameters } from '../models/userModel';
@@ -25,14 +24,11 @@ export class UserController extends Controller {
     @Get("{userId}")
     public async getUser(
         userId: ShortId,
-        @Request() request: any,
+        // @Request() request: ExRequest,
         @Query() email?: Email,
     ): Promise<User> {
-        console.log('arguments', arguments.length);
-        const query = request.query;
-        console.log('request', request.query, request.user);
-        console.log('email', email);
-        return UserModel.getUser(userId, query.email);
+        // const query = request.query as UserCreationParameters;
+        return UserModel.getUser(userId, email);
     }
 
     @SuccessResponse("201", "Created") // Custom success response
@@ -59,10 +55,8 @@ export class UserController extends Controller {
     public async getUserNote(
         userId: ShortId,
         noteId: ShortId,
-        @Request() request: any,
-    ): Promise<User>{
-        console.log(userId, noteId);
-        console.log('request', request.params);
+        // @Request() request: ExRequest,
+    ): Promise<User> {
         return UserModel.getUser(userId, noteId);
     }
-};
+}

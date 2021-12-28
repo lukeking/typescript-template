@@ -3,26 +3,22 @@ import * as express from "express";
 export function expressAuthentication(
     request: express.Request,
     securityName: string,
-    scopes?: string[]
-): Promise<any> {
+    // scopes?: string[]
+): Promise<unknown> {
     if (securityName === "api_key") {
-        let token = request.headers['authorization'];
+        const token = request.headers['authorization'];
 
         if (token === "22222") {
             return Promise.resolve({
-                id: 1,
+                id: '234567890',
                 name: "Ironman",
             });
         } else {
-            return Promise.reject({
-                message: 'Authentication failed',
-            });
+            return Promise.reject(new Error('Authentication failed'));
         }
     }
 
-    return Promise.reject({
-        message: 'Authentication failed',
-    });
+    return Promise.reject(new Error('Authentication failed'));
 
     // if (securityName === "jwt") {
     //     const token =

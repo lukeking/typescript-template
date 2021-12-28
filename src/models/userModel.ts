@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { Email, NoteList, ShortId } from '../constants';
 import Utils from '../utils';
 
@@ -13,25 +12,25 @@ export interface User {
     email: Email;
     name: string;
     notes?: NoteList;
-};
+}
 
 export type UserCreationParameters = Pick<User, 'email' | 'name' | 'notes'>;
 
 class UserModel {
-    public getUser(id: ShortId, email: Email): User {
-        return {
+    public async getUser(id: ShortId, email?: Email): Promise<User> {
+        return Promise.resolve({
             id,
-            email,
+            email: email || 'abc@gmail.com',
             name: 'John'
-        };
+        });
     }
 
-    public createUser(params: UserCreationParameters): User {
-        return {
+    public async createUser(params: UserCreationParameters): Promise<User> {
+        return Promise.resolve({
             id: Utils.shortId(),
             ...params,
-        };
+        });
     }
-};
+}
 
 export default new UserModel();
