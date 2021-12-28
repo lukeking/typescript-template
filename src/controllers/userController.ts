@@ -12,14 +12,18 @@ import {
     SuccessResponse,
     Tags,
     // Request,
+    Response,
 } from "tsoa";
 import { Email, ShortId } from '../constants';
+import { ForbiddenError, UnauthorizedError } from '../errors';
 import UserModel, { User, UserCreationParameters } from '../models/userModel';
 
 @Route("users")
 @Tags("Users")
 export class UserController extends Controller {
     // @Response<ValidateErrorJSON>('default', "Unexpected Error")
+    @Response<UnauthorizedError>(401, 'Unauthorized')
+    @Response<ForbiddenError>(403, 'Forbidden')
     @Security('api_key')
     @Get("{userId}")
     public async getUser(
@@ -28,6 +32,7 @@ export class UserController extends Controller {
         @Query() email?: Email,
     ): Promise<User> {
         // const query = request.query as UserCreationParameters;
+        throw new ForbiddenError('123');
         return UserModel.getUser(userId, email);
     }
 

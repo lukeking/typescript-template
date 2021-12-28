@@ -11,6 +11,7 @@ import morgan from 'morgan';
 
 import { RegisterRoutes } from '../../dist/routes';
 import { IncomingMessage } from 'http';
+import { ForbiddenError, UnauthorizedError } from '../errors';
 
 const app = express();
 
@@ -50,6 +51,21 @@ app.use((err: unknown, req: ExRequest, res: ExResponse, next: NextFunction): ExR
             details: err?.fields,
         });
     }
+
+    if (err instanceof UnauthorizedError) {
+        console.warn(`Caught Authorization Error for ${req.path}:`);
+        return res.status(401).json({
+            message: err.message,
+        });
+    }
+
+    if (err instanceof ForbiddenError) {
+        console.warn(`Caught Forbidden Error for ${req.path}:`);
+        return res.status(403).json({
+            message: err.message,
+        });
+    }
+
     if (err instanceof Error) {
         return res.status(500).json({
             message: "Internal Server Error",

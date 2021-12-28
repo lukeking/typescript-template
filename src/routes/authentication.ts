@@ -1,12 +1,14 @@
 import * as express from "express";
+import { UnauthorizedError } from '../errors';
 
 export function expressAuthentication(
     request: express.Request,
     securityName: string,
-    // scopes?: string[]
+    scopes?: string[]
 ): Promise<unknown> {
     if (securityName === "api_key") {
         const token = request.headers['authorization'];
+        console.log(scopes);
 
         if (token === "22222") {
             return Promise.resolve({
@@ -14,11 +16,11 @@ export function expressAuthentication(
                 name: "Ironman",
             });
         } else {
-            return Promise.reject(new Error('Authentication failed'));
+            return Promise.reject(new UnauthorizedError('Authentication failed'));
         }
     }
 
-    return Promise.reject(new Error('Authentication failed'));
+    return Promise.reject(new UnauthorizedError('Authentication failed'));
 
     // if (securityName === "jwt") {
     //     const token =
